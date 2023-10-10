@@ -4,7 +4,6 @@
 ...
 
 ## Type of change
-*Please delete options that are not relevant.*
 
 - [ ] Additional analysis
 - [ ] Bug fix (non-breaking change which fixes an issue)
