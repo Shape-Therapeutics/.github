@@ -1,0 +1,13 @@
+{
+    "name": "ShapeTX Organization Workflow for Python Build & Test",
+    "description": "ShapeTX Organization starter workflow for building and testing Python projects.",
+    "iconName": "octicon verified",
+    "categories": [
+        "testing"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}
