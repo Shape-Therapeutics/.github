@@ -1,0 +1,75 @@
+name: Build, Test,with Optional Coverage Report Update
+# a good reference: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+on:
+  push:
+    branches:
+          - develop
+          - main
+          - 'feature/**'
+          - 'bugfix/**'
+          - 'release/**'
+          - 'hotfix/**'
+env:
+  UPDATE_COVERAGE_REPORT: false
+
+jobs:
+    build-test:
+        name: Build and Test with Optional Coverage Report Update
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+
+        - name: Set up Python 3.11
+          uses: actions/setup-python@v3
+          with:
+            python-version: 3.11
+    
+        - name: Install Python dependencies
+          uses: py-actions/py-dependency-install@v4
+          with:
+            path: "requirements.txt"
+            #check that 'single-amplicon-seq-api==1.0' is not in requirements.txt
+            #update-pip: "false"
+            update-setuptools: "false"
+            update-wheel: "false"
+  
+        - name: Run Tests
+          run: python -m unittest discover
+
+        # - name: Running pytest
+        #   run: |
+        #     pytest -v  --cov --cov-report=xml --cov-report=html
+
+         
+        #hope to incorporate sonarcloud or codescene in the future - shouldn't need to manage
+        #our own coverage reports once we have this
+        # - name: SonarCloud Scan
+        #   uses: SonarSource/sonarcloud-github-action@master
+        #   env:
+        #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+        - name: Evaluate Coverage
+          if: ${{ env.UPDATE_COVERAGE_REPORT == 'true' && github.ref != 'refs/heads/main' }}
+          run: |
+            pip install coverage
+            coverage run -m unittest discover
+            coverage report -m
+            coverage xml
+    
+        # Don't commit new coverage report on main branch. It will create
+        # a new commit after the build we mark as 'release' that technically 
+        # hasn't been tested.
+        - name: Commit & Push Coverage Report Changes
+          if: ${{ env.UPDATE_COVERAGE_REPORT == 'true' && github.ref != 'refs/heads/main' }}
+          run: |
+            git config --global user.name "github-actions"
+            git config --global user.email "action@github.com"
+
+            git add ./coverage.xml
+            git commit -m "updating coverage report from github actions"
+            git push
+    
+  
