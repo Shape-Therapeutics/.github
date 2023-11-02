@@ -1,7 +1,7 @@
 {
     "name": "ShapeTX Organization Workflow for Python Build & Test",
     "description": "ShapeTX Organization starter workflow for building and testing Python projects.",
-    "iconName": "python-logo-only.svg",
+    "iconName": "python-logo-only",
     "categories": [
         "testing"
     ],
