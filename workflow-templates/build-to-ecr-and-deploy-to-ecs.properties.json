@@ -1,0 +1,13 @@
+{
+    "name": "ShapeTX Organization Workflow for building to ECR and deploying to ECS.",
+    "description": "ShapeTX Organization starter workflow for building and pushing a new container image to AWS ECR, then deploying a new task definition to AWS ECS.",
+    "iconName": "docker-logo.svg",
+    "categories": [
+        "testing"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

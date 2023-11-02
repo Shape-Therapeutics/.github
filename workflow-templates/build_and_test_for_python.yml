@@ -1,0 +1,26 @@
+name: Build and Test from shared_workflows
+
+# This section determines when the workflow is triggered.
+# The template defines the workflow to run on any push to the listed branches.
+# Feel free to change this to match your needs.
+on:
+  push:
+    branches:
+          - develop
+          - main
+          - 'feature/**'
+          - 'bugfix/**'
+          - 'release/**'
+          - 'hotfix/**'
+
+jobs:
+    build-test:
+        name: Build and Test from shared_workflows
+        # you can view the detailes of this workflow by visiting the shared_workflows repository
+        uses: shape-therapeutics/shared_workflows/.github/workflows/build_and_test_with_coverage_for_python.yml@main
+        with:
+          # Set to true to update coverage report stored on your branch
+          update-coverage-report: false
+
+
+          
