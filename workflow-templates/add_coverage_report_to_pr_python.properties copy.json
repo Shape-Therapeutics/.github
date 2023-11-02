@@ -1,0 +1,13 @@
+{
+    "name": "ShapeTX Organization Workflow for to add a Python unit test coverage report to a PR comment.",
+    "description": "ShapeTX Organization starter workflow for running python unit tests, determining coverage, then updating a PR with a comment containing the coverage report.",
+    "iconName": "python-logo-only.svg",
+    "categories": [
+        "testing"
+    ],
+    "filePatterns": [
+        "package.json$",
+        "^Dockerfile",
+        ".*\\.md$"
+    ]
+}

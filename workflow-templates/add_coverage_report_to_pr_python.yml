@@ -1,0 +1,24 @@
+name: Add Coverage Report to PR Comment
+# a good reference: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+# This section determines when the workflow is triggered.
+# The template defines the workflow to run on any PR to the listed branches.
+# Feel free to change this to match your needs.
+on:
+    pull_request:
+        branches:
+          - develop
+          - main
+          - release/**  
+  
+jobs:
+    coverage:
+        # This job runs unit tests and evaluates coverage, before using the github actions user
+        # to add a comment to the PR with the coverage report.
+        # See the workflow details in the shared_workflows repo for more info
+        name: Add Coverage Report to PR Comment from shared_workflows
+        uses: shape-therapeutics/shared_workflows/.github/workflows/add_coverage_report_to_pr_for_python.yml@main
+        with:
+          # Set to true to update pr comment with coverage report
+          write-coverage-comment: true
+          

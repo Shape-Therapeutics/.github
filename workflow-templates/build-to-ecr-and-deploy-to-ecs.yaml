@@ -1,0 +1,51 @@
+# This workflow will build and push a new container image to Amazon ECR,
+# and then will deploy a new task definition to Amazon ECS, when there is a push to the main branch.
+#
+# To use this workflow, you will need to complete the following set-up steps. 
+#  PLEASE follow this slab guide to do so: https://shapetx.slab.com/posts/deploying-web-apps-to-chia-7ghvjbsv
+#
+# 1. Create an ECR repository (in the appropriate account) to store your images.
+#
+# 2. Create an ECS task definition, an ECS cluster, and an ECS service.
+#
+# 3. Change the environment variables below to match what you did above.
+#
+#    For another simple example, see the `ecs_task_definitions` folder in this repository.
+
+name: Deploy to Amazon ECS
+
+# This section determines when the workflow is triggered.
+# The template defines the workflow to run on any push to the listed branches.
+# Feel free to change this to match your needs. Ex. if you have dev environment, you
+# could add the 'develop' branch to the list below.
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  get-version-tag-commit:
+    # This workflow will use git commits and tags to determine the semantic version, then
+    # output the version as an output variable. This variable is used in the deploy job. The
+    # workflow will tag any commits to the main branch, so you can disable this step if you need, but 
+    # you will need to remove this dependency from the deploy job.
+    # See the workflow details in the shared_workflows repo for more info
+    name: Get Version and Tag Commit from shared_workflows
+    uses: shape-therapeutics/shared_workflows/.github/workflows/determine_version_tag_commit.yml@main
+
+  deploy:
+    # This job interacts with AWS infrastructure using the infrastructure information stored in you GitHub repo's envrionment confirguration.
+    # Additionally the job uses secrets to authenticate the AWS actions, which are inherited from the caller.
+    # See the workflow details in the shared_workflows repo for more info
+    name: Deploy from shared_workflows
+    needs: get-version-tag-commit
+    uses: shape-therapeutics/shared_workflows/.github/workflows/build-to-ecr-and-deploy-to-ecs.yaml@main
+    with:
+      version-for-config-file: ${{ needs.get-version-tag-commit.outputs.version }}
+      update-config-with-version: true
+      uses-configini: true
+      should-deploy-to-dev: true
+    secrets: inherit
+   
+
