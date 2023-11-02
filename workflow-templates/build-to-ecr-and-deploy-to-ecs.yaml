@@ -46,6 +46,11 @@ jobs:
       update-config-with-version: true
       uses-configini: true
       should-deploy-to-dev: true
-    secrets: inherit
+    secrets:
+      AWS_ACCESS_KEY: ${{ secrets. }} # value for your AWS account access key
+      AWS_SECRET_KEY: ${{ secrets. }} # value for your AWS account secret key
+      # optional Dev account keys
+      # AWS_ACCESS_KEY_DEV: ${{ secrets. }}
+      # AWS_SECRET_KEY_DEV: ${{ secrets. }}
    
 
